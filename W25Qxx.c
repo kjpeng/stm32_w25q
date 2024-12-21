@@ -18,7 +18,7 @@ void W25Q_SPIRead(uint8_t *data, uint8_t len) {
 }
 
 void W25Q_Reset(void) {
-  uint8_t tData[];
+  uint8_t tData[2];
   tData[0] = W25Q_RSTEN;      // enable Reset
   tData[1] = W25Q_RST;
 
@@ -36,5 +36,5 @@ uint32_t W25Q_ReadID(void) {
   W25Q_SPIRead(rData, 3);
   W25Q_DeselectChip();
 
-  return rData[0] << 16 | rData[1] << 8 | rData[0];
+  return rData[0] << 16 | rData[1] << 8 | rData[2];
 }
