@@ -107,6 +107,30 @@ void W25Q_WritePage(uint32_t page, uint16_t offset, uint32_t size, uint8_t *data
   for (uint32_t i = 0; i < numPages; i++) {
     uint32_t memAddr = (startPage * 256) + offset;
     uint16_t bytesRemaining = W25Q_BytesToWrite(size, offset);
+
+    W25Q_EnableWrite();
+    uint32_t indx = 4;
+    tData[0] = W25Q_PAGEPROG;
+    tData[1] = (memAddr >> 16) & 0xFF;
+    tData[2] = (memAddr >> 8) & 0xFF;
+    tData[3] = (memAddr) & 0xFF;
+
+    uint16_t bytesToSend = bytesRemaining + indx;
+
+    for (uint16_t i = 0; i < bytesRemaining; i++) {
+      tData[indx++] = data[i + dataPosition];
+    }
+
+    W25Q_SelectChip();
+    W25Q_SPIWrite(tData, bytesToSend);
+    W25Q_DeselectChip();
+
+    startPage++;
+    offset = 0;
+    size = size - bytesRemaining;
+    dataPosition = dataPosition + bytesRemaining;
+
+    W25Q_DisableWrite();
   }
 }
 

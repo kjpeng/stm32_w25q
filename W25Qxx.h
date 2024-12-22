@@ -12,6 +12,7 @@
 #define W25Q_ENWRITE  0x06
 #define W25Q_DEWRITE  0x04
 #define W25Q_ERASESEC 0x20
+#define W25Q_PAGEPROG 0x02
 
 extern SPI_HandleTypeDef hspi2;
 
